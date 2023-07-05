@@ -30,6 +30,7 @@ Vagrant.configure("2") do |config|
         docker pull nginx
         docker run -it -d -p 8080:80 --name nginx-server nginx
         docker exec -it nginx-server /bin/bash
+        docker cp /vagrant/htdocs nginx-server:/usr/share/nginx/html
       SCRIPT
     end
   end
