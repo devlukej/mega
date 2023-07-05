@@ -38,13 +38,3 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 docker -v
 # Docker version 24.0.2, build cb74dfc
 ```
-
-### nginx 연결
-``` bash
-docker pull nginx
-docker run -it -d -p 8080:80 --name nginx-server nginx
-docker exec -it nginx-server /bin/bash
-cat /etc/nginx/conf.d/default.conf
-cat /usr/share/nginx/html
-docker cp /vagrant/html nginx-server:/usr/share/nginx/
-```
