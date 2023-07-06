@@ -40,4 +40,6 @@ docker -v
 ```
 
 ### Docker Token
-env/docker_token 생성하여 [docker hub](https://hub.docker.com/settings/security) 사이트 접속하여 생성한 Token 값 등록
+1. 현재 README.md 파일이 있는 위치에 env 디렉토리 생성
+2. env 디렉토리 안에 docker_token 파일 생성
+3. [docker hub](https://hub.docker.com/settings/security) 사이트 접속하여 생성한 Token 값 docker_token 파일에 등록
