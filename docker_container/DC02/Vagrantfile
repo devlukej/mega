@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
       sshfs.vm.network "private_network",ip: "192.168.33.250"
       sshfs.vm.provision "shell", inline: <<-SCRIPT
         sudo useradd -m -s /bin/bash sshfs
-        docker login -u jochanho --password < /vagrant/env/
+        docker login -u jochanho --password-stdin < /vagrant/env/docker_token
         echo sshfs:qwerasdf | sudo chpasswd
         git clone https://github.com/devlukej/static-web-template.git
         sudo mkdir /home/sshfs/htdocs
@@ -46,7 +46,7 @@ Vagrant.configure("2") do |config|
         sudo apt-get update -y
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
         sudo usermod -a -G docker vagrant
-        docker login -u jochanho --password < /vagrant/env/
+        docker login -u jochanho --password-stdin < /vagrant/env/docker_token
         docker plugin install --grant-all-permissions vieux/sshfs
         docker pull httpd
         docker volume create --driver vieux/sshfs -o sshcmd=sshfs@192.168.33.250:/home/sshfs/htdocs -o password=qwerasdf -o allow_other sshfs_vol
