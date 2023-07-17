@@ -1,0 +1,37 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  config.vm.define "ubuntu1" do |ubuntu1|
+    ubuntu1.vm.hostname = "mz-server1"
+    ubuntu1.vm.provider "virtualbox" do |vb|
+    vb.name = "ubuntu-server1"
+    vb.cpus = 2
+    vb.memory = 2048
+    end
+    ubuntu1.vm.network "private_network", ip: "192.168.0.2"
+  end
+
+  config.vm.define "ubuntu2" do |ubuntu2|
+    ubuntu2.vm.hostname = "mz-server2"
+    ubuntu2.vm.provider "virtualbox" do |vb|
+    vb.name = "ubuntu-server2"
+    vb.cpus = 2
+    vb.memory = 2048
+    end
+    ubuntu2.vm.network "private_network", ip: "192.168.0.3"
+  end
+
+  config.vm.define "ubuntu3" do |ubuntu3|
+    ubuntu3.vm.hostname = "mz-server3"
+    ubuntu3.vm.provider "virtualbox" do |vb|
+    vb.name = "ubuntu-server3"
+    vb.cpus = 2
+    vb.memory = 2048
+    end
+    ubuntu3.vm.network "private_network", ip: "192.168.0.4"
+  end
+
+end
