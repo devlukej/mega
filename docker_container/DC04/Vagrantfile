@@ -11,7 +11,12 @@ Vagrant.configure("2") do |config|
     vb.cpus = 2
     vb.memory = 2048
     end
+    ubuntu1.vm.network "public_network"
     ubuntu1.vm.network "private_network", ip: "192.168.0.2"
+
+    ubuntu1.vm.provision "shell", inline: <<-SCRIPT
+      sudo ip route del default via 10.0.2.2 dev enp0s3
+    SCRIPT
   end
 
   config.vm.define "ubuntu2" do |ubuntu2|
@@ -22,6 +27,10 @@ Vagrant.configure("2") do |config|
     vb.memory = 2048
     end
     ubuntu2.vm.network "private_network", ip: "192.168.0.3"
+
+    ubuntu2.vm.provision "shell", inline: <<-SCRIPT
+    sudo ip route del default via 10.0.2.2 dev enp0s3
+  SCRIPT
   end
 
   config.vm.define "ubuntu3" do |ubuntu3|
@@ -32,6 +41,10 @@ Vagrant.configure("2") do |config|
     vb.memory = 2048
     end
     ubuntu3.vm.network "private_network", ip: "192.168.0.4"
+
+    ubuntu3.vm.provision "shell", inline: <<-SCRIPT
+      sudo ip route del default via 10.0.2.2 dev enp0s3
+    SCRIPT
   end
 
 end
