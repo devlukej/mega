@@ -1,20 +1,19 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: web-pod-nginx
+  name: web-pod-httpd
   labels:
     app: web
-    app-type: nginx
-
+    app-type: apache
 spec:
   containers:
-  - name: nginx-container
-    image: nginx:latest
+  - name: apache-container
+    image: httpd:latest
     resources:
       limits:
         memory: "128Mi"
         cpu: "250m"
     ports:
-    - containerPort: 80
+      - containerPort: 80
   imagePullSecrets:
   - name: docker-pull-secret
