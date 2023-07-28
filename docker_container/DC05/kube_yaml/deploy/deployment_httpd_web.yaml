@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: static-web
-      version: "2.0"
+      version: "3.0"
       server: httpd
       date: "2023-07"
   replicas: 3
@@ -14,13 +14,13 @@ spec:
     metadata:
       labels:
         app: static-web
-        version: "2.0"
+        version: "3.0"
         server: httpd
         date: "2023-07"
     spec:
       containers:
       - name: httpd-static-web
-        image: jochanho/httpd:2.0
+        image: jochanho/httpd:3.0
         resources:
           limits:
             memory: "128Mi"

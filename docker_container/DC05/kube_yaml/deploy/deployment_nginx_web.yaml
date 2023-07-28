@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: static-web
-      version: "1.1"
+      version: "3.0"
       server: nginx
       date: "2023-07"
   replicas: 3
@@ -14,13 +14,13 @@ spec:
     metadata:
       labels:
         app: static-web
-        version: "1.1"
+        version: "3.0"
         server: nginx
         date: "2023-07"
     spec:
       containers:
       - name: nginx-static-web
-        image: jochanho/nginx:1.0
+        image: jochanho/nginx:3.0
         resources:
           limits:
             memory: "128Mi"
