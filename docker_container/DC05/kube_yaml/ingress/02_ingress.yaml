@@ -1,0 +1,162 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-web
+spec:
+  selector:
+    app: main-web
+  ports:
+  - port: 80
+    targetPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-web
+spec:
+  selector:
+    app: test-web
+  ports:
+  - port: 80
+    targetPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-static-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: main-web
+  template:
+    metadata:
+      labels:
+        app: main-web
+    spec:
+      volumes:
+      - name: nfs-vol
+        persistentVolumeClaim:
+          claimName: nfs-vol
+      containers:
+      - name: nginx-static-web
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: nfs-vol
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: docker-pull-secret
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-test-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-web
+  template:
+    metadata:
+      labels:
+        app: test-web
+    spec:
+      containers:
+      - name: nginx-test-web
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: docker-pull-secret
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+  labels:
+    name: web-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    kubernetes.io/ingress.class: nginx
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "kube.home.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: main-web
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/main"
+        backend:
+          service:
+            name: main-web
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/test"
+        backend:
+          service:
+            name: test-web
+            port: 
+              number: 80
+
+---
+
+# nfs-vol.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-vol
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  volumeName: nfs-pv
+  storageClassName: ""
+
+---
+
+# nfs-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
+  nfs:
+    path: /mnt/nfs_share1
+    server: 192.168.10.14
