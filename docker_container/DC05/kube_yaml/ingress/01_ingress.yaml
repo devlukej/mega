@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: first-app
   labels:
-    name: first-app
+    app: first-app
 spec:
   containers:
   - name: first-app
@@ -16,15 +16,13 @@ spec:
       - containerPort: 80
   imagePullSecrets:
   - name: docker-pull-secret
-  
 ---
-
 apiVersion: v1
 kind: Pod
 metadata:
   name: second-app
   labels:
-    name: second-app
+    app: second-app
 spec:
   containers:
   - name: second-app
@@ -37,9 +35,7 @@ spec:
       - containerPort: 80
   imagePullSecrets:
   - name: docker-pull-secret
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -50,9 +46,7 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -63,32 +57,39 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-
 ---
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: myingress
   labels:
     name: myingress
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: "/"
-    kubernetes.io/ingress.class: nginx
 spec:
+  ingressClassName: nginx
   rules:
-  - host: "example.com"
+  - host: "kube.web.co.kr"
     http:
       paths:
       - pathType: Prefix
-        path: "/first" #example.com/first
+        path: /
         backend:
           service:
             name: first-service
             port: 
               number: 80
       - pathType: Prefix
-        path: "/second" #example.com/second
+        path: /first
+        backend:
+          service:
+            name: first-service
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: /second
         backend:
           service:
             name: second-service
