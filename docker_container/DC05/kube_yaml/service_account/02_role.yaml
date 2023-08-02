@@ -1,12 +1,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: user1-role
+  name: deploy-read-user-role
   namespace: default
 rules:
-- apiGroups: [""] #kubernetes API의 Group
-  resources: ["pods"] #kubernetes API의 Group에 소속되어 있는 Kind
-  verbs: ["create","get","list","watch","patch","delete"] #리소스에 대한 조회/생성/삭제/수정 등의 작업 
+- apiGroups: ["apps"] #kubernetes API의 Group
+  resources: ["deployments"] #kubernetes API의 Group에 소속되어 있는 Kind
+  verbs: ["get","list","watch"] #리소스에 대한 조회/생성/삭제/수정 등의 작업 
   
   #verbs 명령어
   #get              : 상세 조회 권한
