@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob
+spec:
+  ttlSecondsAfterFinished: 100 #초
+  parallelism: 2 #한 번에 실행할 파드 수
+  completions: 6 #정상 종료 수 6개
+  template:
+    spec:
+      #파드
+      containers:
+      - name: job-container
+        image: alpine
+        command: ["/bin/sh", "-c", "echo 'Job Running'"]
+      restartPolicy: Never
+
