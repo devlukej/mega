@@ -1,0 +1,5 @@
+resources:
+- htppd_config_map.yaml
+- htppd_ssl_tls_secret.yaml
+- httpd_ssl_config_map.yaml
+- htppd_pod.yaml
