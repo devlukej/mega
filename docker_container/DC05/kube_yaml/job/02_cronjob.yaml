@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mycronjob
+spec:
+  #          분 시 일 월 요일
+  schedule: "*  *  *  *  *"
+  successfulJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cronjob-container
+            image: alpine
+            command: ["/bin/sh", "-c", "echo 'Job Running'"]
+          restartPolicy: OnFailure
