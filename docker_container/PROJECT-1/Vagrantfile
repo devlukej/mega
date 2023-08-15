@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "ubuntu/focal64"
+    config.vm.define "dock" do |dock|
+        dock.vm.hostname = "docker-registry"
+        dock.vm.provider "virtualbox" do |vb|
+            vb.name = "docker-registry"
+            vb.cpus = 4
+            vb.memory = 8192
+        end
+        dock.vm.network "private_network", ip: "192.168.10.11"
+        dock.vm.network "public_network"
+    end
+
+    config.vm.define "spring" do |spring|
+        spring.vm.hostname = "spring"
+        spring.vm.provider "virtualbox" do |vb|
+            vb.name = "spring"
+            vb.cpus = 4
+            vb.memory = 8192
+        end
+        spring.vm.network "private_network", ip: "192.168.10.12"
+        spring.vm.network "public_network"
+    end
+end
