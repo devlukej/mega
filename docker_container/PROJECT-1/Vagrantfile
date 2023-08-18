@@ -14,7 +14,26 @@ Vagrant.configure("2") do |config|
         dock.vm.network "private_network", ip: "192.168.10.12"
         dock.vm.network "public_network"
         dock.vm.provision "shell", inline: <<-SCRIPT
-      SCRIPT
+        sudo apt-get update -y
+        sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        sudo apt-get update -y
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+        sudo usermod -aG docker $USER
+        docker login -u jochanho --password-stdin < /vagrant/env/docker_token
+        git clone -b 1st-project --single-branch https://github.com/devlukej/Unplugged.git
+        docker build -t jenkins jenkins/.
+        docker run --name jenkins-docker -d -p 8080:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -u root jenkins/jenkins:lts
+        sudo mkdir /home/jenkins/.ssh
+        sudo chmod 700 /home/jenkins/.ssh
+        sudo ssh-keygen -t rsa
+        ssh-keygen -t rsa -f /home/jenkins/.ssh/id_rsa -P ''
+        docker build -t spring-server spring-server/.
+        docker run --name spring-server -itd -p 9000:9000 -p 9022:22 spring-server:latest
+        sudo docker cp /home/jenkins/.ssh/id_rsa.pub spring-server:/home/spring/.ssh/authorized_keys
+        
+        SCRIPT
     end
 
     config.vm.define "spring" do |spring|
