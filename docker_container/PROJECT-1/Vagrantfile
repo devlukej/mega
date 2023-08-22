@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
         sudo usermod -aG docker $USER
         docker login -u jochanho --password-stdin < /vagrant/env/docker_token
         git clone https://github.com/devlukej/project.git
-        docker run --name jenkins-docker -d -p 8080:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -u root jenkins/jenkins:lts
+        docker run --name jenkins-docker -itd -p 8080:8080 -p 50000:50000 --restart=always -v /home/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker --group-add 998 -u root jenkins/jenkins:lts
         sudo mkdir /home/jenkins/.ssh
         sudo chmod 700 /home/jenkins/.ssh
         ssh-keygen -t rsa -f /home/jenkins/.ssh/id_rsa -P ''
