@@ -1,0 +1,78 @@
+$script = <<-SCRIPT
+    sudo apt-get install gnupg curl
+    curl -fsSL https://pgp.mongodb.com/server-7.0.asc | \
+    sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+    --dearmor
+    echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+    sudo apt-get update
+    sudo apt-get install -y mongodb-org
+SCRIPT
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "ubuntu/focal64"
+    config.vm.define "mongo1" do |mongo1|
+        mongo1.vm.hostname = "mongo1"
+        mongo1.vm.provider "virtualbox" do |vb|
+            vb.name = "mongo1"
+            vb.cpus = 4
+            vb.memory = 4096
+        end
+        mongo1.vm.network "private_network", ip: "192.168.10.10"
+        mongo1.vm.provision "shell", inline: $script
+    end
+    config.vm.box = "ubuntu/focal64"
+    config.vm.define "mongo2" do |mongo2|
+        mongo2.vm.hostname = "mongo2"
+        mongo2.vm.provider "virtualbox" do |vb|
+            vb.name = "mongo2"
+            vb.cpus = 4
+            vb.memory = 4096
+        end
+        mongo2.vm.network "private_network", ip: "192.168.10.20"
+        mongo2.vm.provision "shell", inline: $script
+    end
+    config.vm.box = "ubuntu/focal64"
+    config.vm.define "mongo3" do |mongo3|
+        mongo3.vm.hostname = "mongo3"
+        mongo3.vm.provider "virtualbox" do |vb|
+            vb.name = "mongo3"
+            vb.cpus = 4
+            vb.memory = 4096
+        end
+        mongo3.vm.network "private_network", ip: "192.168.10.30"
+        mongo3.vm.provision "shell", inline: $script
+    end
+    config.vm.box = "ubuntu/focal64"
+    config.vm.define "mongo4" do |mongo4|
+        mongo4.vm.hostname = "mongo4"
+        mongo4.vm.provider "virtualbox" do |vb|
+            vb.name = "mongo4"
+            vb.cpus = 4
+            vb.memory = 4096
+        end
+        mongo4.vm.network "private_network", ip: "192.168.10.40"
+        mongo4.vm.provision "shell", inline: $script
+    end
+    config.vm.box = "ubuntu/focal64"
+    config.vm.define "mongo5" do |mongo5|
+        mongo5.vm.hostname = "mongo5"
+        mongo5.vm.provider "virtualbox" do |vb|
+            vb.name = "mongo5"
+            vb.cpus = 4
+            vb.memory = 4096
+        end
+        mongo5.vm.network "private_network", ip: "192.168.10.50"
+        mongo5.vm.provision "shell", inline: $script
+    end
+    config.vm.box = "ubuntu/focal64"
+    config.vm.define "mongo6" do |mongo6|
+        mongo6.vm.hostname = "mongo6"
+        mongo6.vm.provider "virtualbox" do |vb|
+            vb.name = "mongo6"
+            vb.cpus = 4
+            vb.memory = 4096
+        end
+        mongo6.vm.network "private_network", ip: "192.168.10.60"
+        mongo6.vm.provision "shell", inline: $script
+    end
+end

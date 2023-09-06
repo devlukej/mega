@@ -1,0 +1,27 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "ubuntu/focal64"
+
+    config.vm.define "mongo1" do |mongo1|
+        mongo1.vm.hostname = "mongo1"
+        mongo1.vm.provider "virtualbox" do |vb|
+            vb.name = "mongo1"
+            vb.cpus = 4
+            vb.memory = 4096
+        end
+        mongo1.vm.network "private_network", ip: "192.168.10.10"
+        mongo1.vm.network "public_network", ip: "192.168.101.158",
+                        netmask: "255.255.254.0",
+                        gateway: "192.168.100.1"
+    end
+
+    config.vm.define "mongo2" do |mongo2|
+        mongo2.vm.hostname = "mongo2"
+        mongo2.vm.provider "virtualbox" do |vb|
+            vb.name = "mongo2"
+            vb.cpus = 4
+            vb.memory = 4096
+        end
+        mongo2.vm.network "private_network", ip: "192.168.10.20"
+    end
+
+end
